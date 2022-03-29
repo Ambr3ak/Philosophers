@@ -55,8 +55,9 @@ A detached thread is no longer joinable. They clear their own results.
 > Cela garantit que les ressources mémoire consommées par *th* seront immédiatement libérées lorsque l'exécution de *th* s'achèvera. Cependant, cela empêche les autres threads de se synchroniser sur la mort de *th* en utilisant **[pthread_join](http://manpagesfr.free.fr/man/man3/pthread_join.3.html)**
 > 
 
-Be careful the main thread does not finish before the detached thread. 
-```
+Be careful the main thread does not finish before the detached thread.
+
+```c
 while (check_alive(arg->philo) && !check_times_eat(arg->philo))
 	ft_usleep(arg->philo, 1);
 ```
@@ -81,7 +82,7 @@ Every philosopher has his own thread and every fork has its mutex.
 
 A philosopher starts by taking his left fork. This means that his right fork belongs to his right neighbor.
 
-```jsx
+```c
 pthread_mutex_init(&philo[i].l_fork, NULL);
 if (i == arg->n_philo - 1)
 	philo[i].r_fork = &philo[0].l_fork;
@@ -91,7 +92,7 @@ else
 
 You have to let the uneven-numbers go first, so they don't eat at the same time. In addition, we use the method of inverted philosophers to avoid that a philosopher waits two turns to eat, and therefore dies.
 
-```jsx
+```c
 	if (tp->id % 2 == 0)
 	{
 		pthread_mutex_lock(tp->r_fork);
@@ -116,7 +117,7 @@ To know when to stop the program, we have to create a detached thread. This thre
 
 Simple, we have to check if the time to die is less than the time between two meals or the begining of the program. 
 
-```jsx
+```c
 actual_time() - tp->start_eat >= tp->ttd
 ```
 
@@ -127,7 +128,7 @@ The 5rd argument consists in giving a number of meals for the philosopher before
 > If all philosophers have eaten at least number_of_times_each_philosopher_must_eat times, the simulation ends. If this argument is not specified, then the simulation ends when a philosopher dies.
 > 
 
-```jsx
+```c
 int check_times_eat(t_data *tp)
 {
 	int	eat;
