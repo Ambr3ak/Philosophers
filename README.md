@@ -55,6 +55,12 @@ A detached thread is no longer joinable. They clear their own results.
 > Cela garantit que les ressources mémoire consommées par *th* seront immédiatement libérées lorsque l'exécution de *th* s'achèvera. Cependant, cela empêche les autres threads de se synchroniser sur la mort de *th* en utilisant **[pthread_join](http://manpagesfr.free.fr/man/man3/pthread_join.3.html)**
 > 
 
+Be careful the main thread does not finish before the detached thread. 
+```
+while (check_alive(arg->philo) && !check_times_eat(arg->philo))
+	ft_usleep(arg->philo, 1);
+```
+
 ### Deadlocks
 
 → When you lock twice a mutex
@@ -82,8 +88,6 @@ if (i == arg->n_philo - 1)
 else
 	philo[i].r_fork = &philo[i + 1].l_fork;
 ```
-
-![Capture d’écran 2022-03-27 à 16.25.25.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/204702f9-fdc5-4c38-868b-bdadfdea5f73/Capture_decran_2022-03-27_a_16.25.25.png)
 
 You have to let the uneven-numbers go first, so they don't eat at the same time. In addition, we use the method of inverted philosophers to avoid that a philosopher waits two turns to eat, and therefore dies.
 
